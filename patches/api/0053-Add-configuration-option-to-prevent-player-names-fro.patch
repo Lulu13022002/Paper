@@ -27,10 +27,10 @@ index 02476f858240f5f8d1cb5d621cc52f7de351c311..878439cc18eb5f82224e845f073d0bea
  
      @NotNull
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index f33d66bf9ff18545468949a57004e6b99de2fb9c..699eb44178522ccdac6f5ee6f8da941dc4a16b59 100644
+index 59b29dd55c87e6a338dbde00da82231e66f0f670..a2dba16d526737bc90f6145277e6e395d9f09d43 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -1852,4 +1852,14 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -1859,4 +1859,14 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
      void reloadPermissions(); // Paper
  
      boolean reloadCommandAliases(); // Paper

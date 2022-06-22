@@ -24,7 +24,7 @@ index 0000000000000000000000000000000000000000..6b0bed550763f34e18c9e92f9a47ec0c
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 7bcfb1420e67f941df4dd39a3b94c02f03ee27fa..ecaa4d9ff28551b7039f3489f1884d3b664c8ce6 100644
+index ee2927900baca8aa537f0ce8dba62f9f5cf23a30..4e847c4322e4a25b7787e923ec73d857c9f7361d 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -2021,6 +2021,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
@@ -164,7 +164,7 @@ index 3d688e334c7287f41460bd866bfd1155e8bb55d2..55006724ccec9f3de828ec18693728e9
  
      @Override
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index f2a18511119bc52ef3ab06165be68b6afa57bfad..6ffd1c69bf9372dadaadbb36de8ca4b8a56cc1a7 100644
+index d8a457f027b5346b25d3eef71a9e6009ee9c4eab..0f63a1d2bc40e606c084a7566958f5a22dd5c43e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -281,6 +281,7 @@ public final class CraftServer implements Server {
@@ -184,7 +184,7 @@ index f2a18511119bc52ef3ab06165be68b6afa57bfad..6ffd1c69bf9372dadaadbb36de8ca4b8
          MobEffects.BLINDNESS.getClass();
          PotionEffectType.stopAcceptingRegistrations();
          // Ugly hack :(
-@@ -2882,5 +2883,10 @@ public final class CraftServer implements Server {
+@@ -2886,5 +2887,10 @@ public final class CraftServer implements Server {
          return datapackManager;
      }
  

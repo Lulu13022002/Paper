@@ -29,10 +29,10 @@ index 362b879996623832d436bb987630b115b7d86f99..5345e05755b13553491211a84d263c80
      public static Server.Spigot spigot() {
          return server.spigot();
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 8dda96966061bb3a12b63fff74a378857ec43200..aca9050075f3041e2b248368e378c354e7b553d6 100644
+index 562ad732ef6485c15d6d84e87594a25af174ca18..aef6d5b9c409bf6cb02bbf9533bd04a92c2526ac 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -1602,6 +1602,15 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -1609,6 +1609,15 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
      public double[] getTPS();
      // Paper end
  

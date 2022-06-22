@@ -2803,10 +2803,10 @@ index b23b6bf1af91c9460fdb231000df6191ec673544..95693bab8051ff3e94c3a184c8a2691e
  
      /**
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 01f4329d23a5e33f321df394107eaf1b918f8859..1e717c3096f3cccf1ce4b0e849c43525011c84de 100644
+index 6a4f0476587df74e3332a0c5af322b9301ea6f3e..c57e73a532a04da5737f2952380d53130f979fb1 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -1740,6 +1740,26 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -1747,6 +1747,26 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
              throw new UnsupportedOperationException("Not supported yet.");
          }
  

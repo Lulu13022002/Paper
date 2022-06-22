@@ -729,7 +729,7 @@ index 13421daa96b4ba302581f36abcd730952713d8cd..049e64c355d5f064009b1107ad15d28c
                      } catch (Exception exception) {
                          if (listener.shouldPropagateHandlingExceptions()) {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 1ad7797dbef61f8e8011ae6db3089939a279071c..1190d62594c5b1be1c11d55e646ee0bac27307cb 100644
+index d2547112a1483474851a178ca32114a3070ffa8d..8bf902c759756fd0e85f92642096c5d42157f235 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -175,7 +175,7 @@ import org.bukkit.craftbukkit.generator.CustomWorldChunkManager;
@@ -916,7 +916,7 @@ index b7a06306614087dfab4d4dcf83797b5a92c376c5..00a50196f6a4768d84acfbbeec79a075
                  i = this.context.runTopCommand(function, source);
              } finally {
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 408eff59b081ace53bf435947df17e2fe75bfd5e..cd0365249dffc1704a349a5e419364bbf9e8543b 100644
+index e337a81c11d031f4c219b886a085effc6a2b8a33..f5077959d5c2bde1cdf419db8e2b9ef078f9b01b 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 @@ -63,8 +63,9 @@ import org.apache.logging.log4j.Level;
@@ -1634,10 +1634,10 @@ index 98ba88896c73651591b8ad8e070868fb443ae999..864e2e0355a5fb8c1d4a5b0896ba299f
          };
      }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 55265d09707056160b44d15e2e66ad1336d4f9c8..99e1ea52493ff2ab620e32054d0ee2b2c78db6b4 100644
+index be19e96c7ca63ea2a64b28c673b03fc6650a2f6d..370246a7f9e22eac3be20529d89d05f6feba3d87 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -2365,12 +2365,31 @@ public final class CraftServer implements Server {
+@@ -2369,12 +2369,31 @@ public final class CraftServer implements Server {
      private final org.bukkit.Server.Spigot spigot = new org.bukkit.Server.Spigot()
      {
  

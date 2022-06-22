@@ -1367,6 +1367,64 @@ index 762a9392ffac3042356709dddd15bb3516048bed..3544e2dc2522e9d6305d727d56e73490
          buf.writeComponent(this.header);
          buf.writeComponent(this.footer);
      }
+diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
+index 1ad7797dbef61f8e8011ae6db3089939a279071c..d2547112a1483474851a178ca32114a3070ffa8d 100644
+--- a/src/main/java/net/minecraft/server/MinecraftServer.java
++++ b/src/main/java/net/minecraft/server/MinecraftServer.java
+@@ -226,7 +226,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+     private boolean pvp;
+     private boolean allowFlight;
+     @Nullable
+-    private String motd;
++    private net.kyori.adventure.text.Component motd; // Paper
+     private int playerIdleTimeout;
+     public final long[] tickTimes;
+     @Nullable
+@@ -969,7 +969,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+             }
+ 
+             this.nextTickTime = Util.getMillis();
+-            this.status.setDescription(Component.literal(this.motd));
++            this.status.setDescription(new io.papermc.paper.adventure.AdventureComponent(this.motd)); // Paper
+             this.status.setVersion(new ServerStatus.Version(SharedConstants.getCurrentVersion().getName(), SharedConstants.getCurrentVersion().getProtocolVersion()));
+             this.status.setPreviewsChat(this.previewsChat());
+             this.updateStatusIcon(this.status);
+@@ -1586,11 +1586,11 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+ 
+     public abstract boolean isCommandBlockEnabled();
+ 
+-    public String getMotd() {
++    public net.kyori.adventure.text.Component getMotd() { // Paper
+         return this.motd;
+     }
+ 
+-    public void setMotd(String motd) {
++    public void setMotd(net.kyori.adventure.text.Component motd) { // Paper
+         this.motd = motd;
+     }
+ 
+diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+index e476f93547f386ded0174693a6218d793ccc450b..f4fcef4b84be37437c799afe029025cd66ae6b62 100644
+--- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
++++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+@@ -195,7 +195,7 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+ 
+         this.setPvpAllowed(dedicatedserverproperties.pvp);
+         this.setFlightAllowed(dedicatedserverproperties.allowFlight);
+-        this.setMotd(dedicatedserverproperties.motd);
++        this.setMotd(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().deserialize(dedicatedserverproperties.motd)); // Paper
+         super.setPlayerIdleTimeout((Integer) dedicatedserverproperties.playerIdleTimeout.get());
+         this.setEnforceWhitelist(dedicatedserverproperties.enforceWhitelist);
+         // this.worldData.setGameType(dedicatedserverproperties.gamemode); // CraftBukkit - moved to world loading
+@@ -468,7 +468,7 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+ 
+     @Override
+     public String getServerName() {
+-        return this.getMotd();
++        return net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(this.getMotd()); // Paper
+     }
+ 
+     public void showGui() {
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 index 56996af65ef7478adb90d3b2f4cd3351fc49200b..7002d5f5700570e32ebf0b63e340d87d58357162 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
@@ -1839,7 +1897,7 @@ index 595b56b2ab9a813ba71399d306117294fa90dc65..3527d40102d512d0e276edc969ea3c18
                  }
                  collection = icons;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index a888631dc866a784def3e59cd6cc644905f866b3..9bd413eb9700d33384f2806e957d42613bd6f0f3 100644
+index a888631dc866a784def3e59cd6cc644905f866b3..bd7b996d581c54d40e0eab31064ccb4ac4d92ed0 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -588,8 +588,10 @@ public final class CraftServer implements Server {
@@ -1853,6 +1911,15 @@ index a888631dc866a784def3e59cd6cc644905f866b3..9bd413eb9700d33384f2806e957d4261
      }
  
      @Override
+@@ -847,7 +849,7 @@ public final class CraftServer implements Server {
+ 
+         this.console.setPvpAllowed(config.pvp);
+         this.console.setFlightAllowed(config.allowFlight);
+-        this.console.setMotd(config.motd);
++        this.console.setMotd(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().deserialize(config.motd)); // Paper
+         this.overrideSpawnLimits();
+         this.warningState = WarningState.value(this.configuration.getString("settings.deprecated-verbose"));
+         TicketType.PLUGIN.timeout = this.configuration.getInt("chunk-gc.period-in-ticks");
 @@ -1409,7 +1411,15 @@ public final class CraftServer implements Server {
          return this.configuration.getInt("settings.spawn-radius", -1);
      }
@@ -1951,20 +2018,29 @@ index a888631dc866a784def3e59cd6cc644905f866b3..9bd413eb9700d33384f2806e957d4261
      public Merchant createMerchant(String title) {
          return new CraftMerchantCustom(title == null ? InventoryType.MERCHANT.getDefaultTitle() : title);
      }
-@@ -1926,6 +1972,12 @@ public final class CraftServer implements Server {
+@@ -1926,10 +1972,20 @@ public final class CraftServer implements Server {
          return Thread.currentThread().equals(console.serverThread) || this.console.hasStopped() || !org.spigotmc.AsyncCatcher.enabled; // All bets are off if we have shut down (e.g. due to watchdog)
      }
  
 +    // Paper start
 +    @Override
 +    public net.kyori.adventure.text.Component motd() {
-+        return net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().deserialize(console.getMotd());
++        return console.getMotd();
 +    }
-+    // Paper end
++    @Override
++    public void motd(net.kyori.adventure.text.Component motd) {
++        console.setMotd(motd);
++    }
      @Override
      public String getMotd() {
-         return this.console.getMotd();
-@@ -2343,4 +2395,15 @@ public final class CraftServer implements Server {
+-        return this.console.getMotd();
++        return net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(this.console.getMotd());
+     }
++    // Paper end
+ 
+     @Override
+     public WarningState getWarningState() {
+@@ -2343,4 +2399,15 @@ public final class CraftServer implements Server {
          return this.spigot;
      }
      // Spigot end
@@ -2915,7 +2991,7 @@ index eebd8c56d319100f1f5ad9bc0b4d5a0d01e27fba..028d7a4cec039312bef59c693ef3d996
      private final Player.Spigot spigot = new Player.Spigot()
      {
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index d0699be22411796174b58733cfb79b80c89f9769..97a614e2367439dbface4a258f966c0440ef965d 100644
+index d0699be22411796174b58733cfb79b80c89f9769..0b4f327facef80580fec829e82ad163de3a64096 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 @@ -816,9 +816,9 @@ public class CraftEventFactory {
@@ -2930,11 +3006,13 @@ index d0699be22411796174b58733cfb79b80c89f9769..97a614e2367439dbface4a258f966c04
          event.setKeepInventory(keepInventory);
          event.setKeepLevel(victim.keepLevel); // SPIGOT-2222: pre-set keepLevel
          org.bukkit.World world = entity.getWorld();
-@@ -843,7 +843,7 @@ public class CraftEventFactory {
+@@ -842,8 +842,8 @@ public class CraftEventFactory {
+     /**
       * Server methods
       */
-     public static ServerListPingEvent callServerListPingEvent(Server craftServer, InetAddress address, String motd, boolean shouldSendChatPreviews, int numPlayers, int maxPlayers) {
+-    public static ServerListPingEvent callServerListPingEvent(Server craftServer, InetAddress address, String motd, boolean shouldSendChatPreviews, int numPlayers, int maxPlayers) {
 -        ServerListPingEvent event = new ServerListPingEvent(address, motd, shouldSendChatPreviews, numPlayers, maxPlayers);
++    public static ServerListPingEvent callServerListPingEvent(Server craftServer, InetAddress address, net.kyori.adventure.text.Component motd, boolean shouldSendChatPreviews, int numPlayers, int maxPlayers) { // Paper
 +        ServerListPingEvent event = new ServerListPingEvent(address, craftServer.motd(), shouldSendChatPreviews, numPlayers, maxPlayers); // Paper - Adventure
          craftServer.getPluginManager().callEvent(event);
          return event;

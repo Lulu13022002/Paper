@@ -18,10 +18,10 @@ index b506cd11b76901827cbe66f46db8df400f7015de..13a5062e539f6f43e6fe582318c36302
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 0b13ff4c656615b19a4cdffa7390c4dd01c5a82d..8dc5d79130949ec0b38737060124fe4421af1fe9 100644
+index cae0d25c01d60c7e215728c34a9ae9641a1d9896..b55493e2bf91587ef88673f84ae64e7b66680d59 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -2608,6 +2608,16 @@ public final class CraftServer implements Server {
+@@ -2612,6 +2612,16 @@ public final class CraftServer implements Server {
          return io.papermc.paper.configuration.GlobalConfiguration.get().commands.suggestPlayerNamesWhenNullTabCompletions;
      }
  

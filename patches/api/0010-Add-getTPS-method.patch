@@ -27,10 +27,10 @@ index fddd0ff9accd661c47c7ccc6d7035c042d991e8b..362b879996623832d436bb987630b115
       * Get the advancement specified by this key.
       *
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 768ae36e3e2fdff753f4f14aa79eb36026fb38c3..8dda96966061bb3a12b63fff74a378857ec43200 100644
+index 02b3c4ec14b29b5c348941fc7afc2ce2c6068dc4..562ad732ef6485c15d6d84e87594a25af174ca18 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -1592,6 +1592,16 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -1599,6 +1599,16 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
      @Nullable
      Entity getEntity(@NotNull UUID uuid);
  

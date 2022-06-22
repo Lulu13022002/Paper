@@ -1606,10 +1606,10 @@ index cf48c93d89da53e0ec771e5c2c8582e30b35e3f5..518dfbb7dbd4221937636cf46d27109d
          }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index b395d3a20a1c71bfe18e7344b910f545630b7e92..de114eda44d475c50f25f8dfedf17c41e783c5d9 100644
+index 8aa1514ea0e6cbafaae731541974af6dbab34046..e221db8291f5e479c527a506bf6e2b062affb479 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -2226,7 +2226,7 @@ public final class CraftServer implements Server {
+@@ -2230,7 +2230,7 @@ public final class CraftServer implements Server {
      public ChunkGenerator.ChunkData createChunkData(World world) {
          Validate.notNull(world, "World cannot be null");
          ServerLevel handle = ((CraftWorld) world).getHandle();

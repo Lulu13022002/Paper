@@ -159,7 +159,7 @@ index 6277451c3c6c551078c237cd767b6d70c4f585ea..10f5cfb1885833a1d2c1027c03974da4
      CRACKED(0x0),
      GLYPHED(0x1),
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index fb11f3db344593ce6e9b31ea91be1a8725b1561d..605c88f11e9f6fd3abd4a69aa663999044be9527 100644
+index 0556bcede55f1ba80fbda848653da574e8792887..463c72cfcd3bfb1abd7343a3332497c4e303ba16 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
 @@ -998,10 +998,8 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
@@ -174,7 +174,7 @@ index fb11f3db344593ce6e9b31ea91be1a8725b1561d..605c88f11e9f6fd3abd4a69aa6639990
      @NotNull
      public OfflinePlayer getOfflinePlayer(@NotNull String name);
  
-@@ -1467,7 +1465,7 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -1474,7 +1472,7 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       *
       * @return the scoreboard manager or null if no worlds are loaded.
       */

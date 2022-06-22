@@ -34,10 +34,10 @@ index 23b57b99169881aa6963694d34f55d9c5c133888..a748f268a992ac8ec9b732f530e3dd48
       * Creates a boss bar instance to display to players. The progress
       * defaults to 1.0
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 5c5d124a179e8c0dc0cf24a51d406c9034f48505..e7d1ece4f1e615e2b0f4da1d85ddd60e23433d4d 100644
+index 4176e21b2de47e49a70a46401b73d760e50a1326..4e05442eea8e56ee41757e9b1137240cfb5a9a88 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -1589,6 +1589,22 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -1596,6 +1596,22 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
      @NotNull
      public ChunkGenerator.ChunkData createChunkData(@NotNull World world);
  

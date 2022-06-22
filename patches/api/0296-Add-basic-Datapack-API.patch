@@ -89,10 +89,10 @@ index 044b5fcf2cbb1078dae348fe2960e4757519fd3c..23b57b99169881aa6963694d34f55d9c
  
      @NotNull
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 7ed0e5d7b86d6bfc6b4218d8c158ada8b34c8461..5c5d124a179e8c0dc0cf24a51d406c9034f48505 100644
+index b91de723ccb49610d323b39f28dbc65e15fb9801..4176e21b2de47e49a70a46401b73d760e50a1326 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2048,5 +2048,11 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2055,5 +2055,11 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       */
      @NotNull
      com.destroystokyo.paper.entity.ai.MobGoals getMobGoals();

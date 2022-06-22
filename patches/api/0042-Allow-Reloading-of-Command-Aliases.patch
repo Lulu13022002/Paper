@@ -26,10 +26,10 @@ index 6234738637f99e62894efef2b7f6499792771856..02476f858240f5f8d1cb5d621cc52f7d
  
      @NotNull
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 23150f346362322ec042c26717d4c6a58b756a6e..f33d66bf9ff18545468949a57004e6b99de2fb9c 100644
+index 70e364767f595af5fe4c5774adc2b653f9281d6d..59b29dd55c87e6a338dbde00da82231e66f0f670 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -1850,4 +1850,6 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -1857,4 +1857,6 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
      // Spigot end
  
      void reloadPermissions(); // Paper
