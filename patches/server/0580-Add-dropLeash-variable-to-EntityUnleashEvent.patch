@@ -5,10 +5,10 @@ Subject: [PATCH] Add dropLeash variable to EntityUnleashEvent
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index 1a2e5e8c32a2fabe3b92ded6c630b8258b57bc0f..837c0a8bd15388bdb60d6950a437640459adde3c 100644
+index 5ec65df458a27edd146c4d80db60efbee8cd8a59..d821f7429f5a6a6cea1d82897185c438a70eed47 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
-@@ -1242,12 +1242,15 @@ public abstract class Mob extends LivingEntity {
+@@ -1257,12 +1257,15 @@ public abstract class Mob extends LivingEntity {
              return InteractionResult.PASS;
          } else if (this.getLeashHolder() == player) {
              // CraftBukkit start - fire PlayerUnleashEntityEvent
@@ -26,7 +26,7 @@ index 1a2e5e8c32a2fabe3b92ded6c630b8258b57bc0f..837c0a8bd15388bdb60d6950a4376404
              return InteractionResult.sidedSuccess(this.level.isClientSide);
          } else {
              InteractionResult enuminteractionresult = this.checkAndHandleImportantInteractions(player, hand);
-@@ -1410,8 +1413,11 @@ public abstract class Mob extends LivingEntity {
+@@ -1425,8 +1428,11 @@ public abstract class Mob extends LivingEntity {
  
          if (this.leashHolder != null) {
              if (!this.isAlive() || !this.leashHolder.isAlive()) {
@@ -40,7 +40,7 @@ index 1a2e5e8c32a2fabe3b92ded6c630b8258b57bc0f..837c0a8bd15388bdb60d6950a4376404
              }
  
          }
-@@ -1474,8 +1480,11 @@ public abstract class Mob extends LivingEntity {
+@@ -1489,8 +1495,11 @@ public abstract class Mob extends LivingEntity {
          boolean flag1 = super.startRiding(entity, force);
  
          if (flag1 && this.isLeashed()) {
@@ -54,7 +54,7 @@ index 1a2e5e8c32a2fabe3b92ded6c630b8258b57bc0f..837c0a8bd15388bdb60d6950a4376404
          }
  
          return flag1;
-@@ -1653,8 +1662,11 @@ public abstract class Mob extends LivingEntity {
+@@ -1668,8 +1677,11 @@ public abstract class Mob extends LivingEntity {
      @Override
      protected void removeAfterChangingDimensions() {
          super.removeAfterChangingDimensions();

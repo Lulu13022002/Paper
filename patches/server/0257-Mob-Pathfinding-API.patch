@@ -7,12 +7,13 @@ Implements Pathfinding API for mobs
 
 diff --git a/src/main/java/com/destroystokyo/paper/entity/PaperPathfinder.java b/src/main/java/com/destroystokyo/paper/entity/PaperPathfinder.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..8c9f0c6c38627beded373ca29f1989ae3ba6f873
+index 0000000000000000000000000000000000000000..da61f201bc1c47ac78d546c014506ef112b6e205
 --- /dev/null
 +++ b/src/main/java/com/destroystokyo/paper/entity/PaperPathfinder.java
-@@ -0,0 +1,139 @@
+@@ -0,0 +1,189 @@
 +package com.destroystokyo.paper.entity;
 +
++import net.minecraft.world.level.pathfinder.BlockPathTypes;
 +import org.apache.commons.lang.Validate;
 +import org.bukkit.Location;
 +import org.bukkit.craftbukkit.entity.CraftLivingEntity;
@@ -108,6 +109,55 @@ index 0000000000000000000000000000000000000000..8c9f0c6c38627beded373ca29f1989ae
 +        entity.getNavigation().pathFinder.nodeEvaluator.setCanFloat(canFloat);
 +    }
 +
++    @Override
++    public void setPathInterestLevel(PathBlock pathBlock, float level) {
++        entity.setPathfindingMalus(BlockPathTypes.valueOf(pathBlock.name()), level);
++    }
++
++    @Override
++    public float getPathInterestLevel(PathBlock pathBlock) {
++        Validate.notNull(pathBlock, "Path block can not be null");
++        return entity.pathfindingMalus.get(BlockPathTypes.valueOf(pathBlock.name()));
++    }
++
++    @Override
++    public float getPathEffectiveInterestLevel(PathBlock pathBlock) {
++        Validate.notNull(pathBlock, "Path block can not be null");
++        return entity.getPathfindingMalus(BlockPathTypes.valueOf(pathBlock.name()));
++    }
++
++    @Override
++    public boolean inheritPathInterestForPassengers() {
++        return entity.shouldPassengersInheritMalusPaper();
++    }
++
++    @Override
++    public boolean canCutThroughCornerBlock(PathBlock pathBlock) {
++        Validate.notNull(pathBlock, "Path block can not be null");
++        return entity.canCutCorner(BlockPathTypes.valueOf(pathBlock.name()));
++    }
++
++    @Override
++    public List<PathBlock> getFearCutCornerBlocks() {
++        List<PathBlock> result = new ArrayList<>(entity.fearCornerBlocks.size());
++        for(BlockPathTypes block : entity.fearCornerBlocks) {
++            result.add(PathBlock.valueOf(block.name()));
++        }
++        return result;
++    }
++
++    @Override
++    public boolean addFearCutCornerBlock(PathBlock pathBlock) {
++        Validate.notNull(pathBlock, "Path block can not be null");
++        return entity.fearCornerBlocks.add(BlockPathTypes.valueOf(pathBlock.name()));
++    }
++
++    @Override
++    public boolean removeCutFearCornerBlock(PathBlock pathBlock) {
++        Validate.notNull(pathBlock, "Path block can not be null");
++        return entity.fearCornerBlocks.remove(BlockPathTypes.valueOf(pathBlock.name()));
++    }
++
 +    public class PaperPathResult implements com.destroystokyo.paper.entity.PaperPathfinder.PathResult {
 +
 +        private final Path path;
@@ -150,6 +200,97 @@ index 0000000000000000000000000000000000000000..8c9f0c6c38627beded373ca29f1989ae
 +        return new Location(entity.level.getWorld(), point.x, point.y, point.z);
 +    }
 +}
+diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
+index 2ffc99730c3d5dbdec63881a1eca07d5fbb1754e..dcd440a93f961650b782b58f4502ec6877d39d89 100644
+--- a/src/main/java/net/minecraft/world/entity/Mob.java
++++ b/src/main/java/net/minecraft/world/entity/Mob.java
+@@ -121,7 +121,7 @@ public abstract class Mob extends LivingEntity {
+     public final float[] armorDropChances;
+     private boolean canPickUpLoot;
+     private boolean persistenceRequired;
+-    private final Map<BlockPathTypes, Float> pathfindingMalus;
++    public final Map<BlockPathTypes, Float> pathfindingMalus; // Paper private -> public
+     @Nullable
+     public ResourceLocation lootTable;
+     public long lootTableSeed;
+@@ -132,6 +132,7 @@ public abstract class Mob extends LivingEntity {
+     private CompoundTag leashInfoTag;
+     private BlockPos restrictCenter;
+     private float restrictRadius;
++    public List<BlockPathTypes> fearCornerBlocks = new java.util.ArrayList<>(); // Paper
+ 
+     public boolean aware = true; // CraftBukkit
+ 
+@@ -156,6 +157,7 @@ public abstract class Mob extends LivingEntity {
+         Arrays.fill(this.handDropChances, 0.085F);
+         if (world != null && !world.isClientSide) {
+             this.registerGoals();
++            this.registerFearCornerBlocks(); // Paper
+         }
+ 
+     }
+@@ -167,6 +169,14 @@ public abstract class Mob extends LivingEntity {
+     // CraftBukkit end
+ 
+     protected void registerGoals() {}
++    // Paper start - Pathfinding API
++    protected void registerFearCornerBlocks() {
++        fearCornerBlocks.add(BlockPathTypes.DANGER_FIRE);
++        fearCornerBlocks.add(BlockPathTypes.DANGER_CACTUS);
++        fearCornerBlocks.add(BlockPathTypes.DANGER_OTHER);
++        fearCornerBlocks.add(BlockPathTypes.WALKABLE_DOOR);
++    }
++    // Paper end
+ 
+     public static AttributeSupplier.Builder createMobAttributes() {
+         return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 16.0D).add(Attributes.ATTACK_KNOCKBACK);
+@@ -179,6 +189,11 @@ public abstract class Mob extends LivingEntity {
+     protected boolean shouldPassengersInheritMalus() {
+         return false;
+     }
++    // Paper start - Pathfinding API
++    public boolean shouldPassengersInheritMalusPaper() {
++        return shouldPassengersInheritMalus();
++    }
++    // Paper end
+ 
+     public float getPathfindingMalus(BlockPathTypes nodeType) {
+         Mob entityinsentient;
+@@ -199,7 +214,7 @@ public abstract class Mob extends LivingEntity {
+     }
+ 
+     public boolean canCutCorner(BlockPathTypes type) {
+-        return type != BlockPathTypes.DANGER_FIRE && type != BlockPathTypes.DANGER_CACTUS && type != BlockPathTypes.DANGER_OTHER && type != BlockPathTypes.WALKABLE_DOOR;
++        return !fearCornerBlocks.contains(type); // Paper pathfinding API
+     }
+ 
+     protected BodyRotationControl createBodyControl() {
+diff --git a/src/main/java/net/minecraft/world/entity/animal/frog/Frog.java b/src/main/java/net/minecraft/world/entity/animal/frog/Frog.java
+index 01f8d11ee4441a1c4d87427e3f9bcd7155259a5b..e59ab91c978670c9698d934cf8c5c63711ebb025 100644
+--- a/src/main/java/net/minecraft/world/entity/animal/frog/Frog.java
++++ b/src/main/java/net/minecraft/world/entity/animal/frog/Frog.java
+@@ -92,6 +92,12 @@ public class Frog extends Animal {
+         this.moveControl = new SmoothSwimmingMoveControl(this, 85, 10, 0.02F, 0.1F, true);
+         this.maxUpStep = 1.0F;
+     }
++    // Paper start - Pathfinding API
++    @Override
++    protected void registerFearCornerBlocks() {
++        fearCornerBlocks.add(BlockPathTypes.WATER_BORDER);
++    }
++    // Paper end
+ 
+     @Override
+     protected Brain.Provider<Frog> brainProvider() {
+@@ -351,7 +357,7 @@ public class Frog extends Animal {
+ 
+     @Override
+     public boolean canCutCorner(BlockPathTypes type) {
+-        return super.canCutCorner(type) && type != BlockPathTypes.WATER_BORDER;
++        return super.canCutCorner(type); // Paper - Pathfinding API
+     }
+ 
+     public static boolean canEat(LivingEntity entity) {
 diff --git a/src/main/java/net/minecraft/world/level/pathfinder/Path.java b/src/main/java/net/minecraft/world/level/pathfinder/Path.java
 index 4ad2ac8d1e9111933fa58c47442fa1f5e8173fd3..2a335f277bd0e4b8ad0f60d8226eb8aaa80a871f 100644
 --- a/src/main/java/net/minecraft/world/level/pathfinder/Path.java

@@ -5,10 +5,10 @@ Subject: [PATCH] Make EntityUnleashEvent cancellable
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index 837c0a8bd15388bdb60d6950a437640459adde3c..a49dfe4f81d449c5dd7ba5b8f9af7fec5c54f5de 100644
+index d821f7429f5a6a6cea1d82897185c438a70eed47..2e347d8da59dab471a0956e251b1efbdfb8940a6 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
-@@ -1482,7 +1482,7 @@ public abstract class Mob extends LivingEntity {
+@@ -1497,7 +1497,7 @@ public abstract class Mob extends LivingEntity {
          if (flag1 && this.isLeashed()) {
              // Paper start - drop leash variable
              EntityUnleashEvent event = new EntityUnleashEvent(this.getBukkitEntity(), UnleashReason.UNKNOWN, true);

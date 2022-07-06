@@ -11,12 +11,58 @@ the location.
 
 You can use EntityPathfindEvent to cancel new pathfinds from overriding your current.
 
+diff --git a/src/main/java/com/destroystokyo/paper/entity/PathBlock.java b/src/main/java/com/destroystokyo/paper/entity/PathBlock.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..ccaa6febbe0c118431293e3908d662dadc21e16c
+--- /dev/null
++++ b/src/main/java/com/destroystokyo/paper/entity/PathBlock.java
+@@ -0,0 +1,40 @@
++package com.destroystokyo.paper.entity;
++
++public enum PathBlock {
++    BLOCKED(-1.0F),
++    OPEN(0.0F),
++    WALKABLE(0.0F),
++    WALKABLE_DOOR(0.0F),
++    TRAPDOOR(0.0F),
++    POWDER_SNOW(-1.0F),
++    DANGER_POWDER_SNOW(0.0F),
++    FENCE(-1.0F),
++    LAVA(-1.0F),
++    WATER(8.0F),
++    WATER_BORDER(8.0F),
++    RAIL(0.0F),
++    UNPASSABLE_RAIL(-1.0F),
++    DANGER_FIRE(8.0F),
++    DAMAGE_FIRE(16.0F),
++    DANGER_CACTUS(8.0F),
++    DAMAGE_CACTUS(-1.0F),
++    DANGER_OTHER(8.0F),
++    DAMAGE_OTHER(-1.0F),
++    DOOR_OPEN(0.0F),
++    DOOR_WOOD_CLOSED(-1.0F),
++    DOOR_IRON_CLOSED(-1.0F),
++    BREACH(4.0F),
++    LEAVES(-1.0F),
++    STICKY_HONEY(8.0F),
++    COCOA(0.0F);
++
++    private final float penalty;
++
++    PathBlock(float defaultPenalty) {
++        this.penalty = defaultPenalty;
++    }
++
++    public float getDefaultPenalty() {
++        return this.penalty;
++    }
++}
 diff --git a/src/main/java/com/destroystokyo/paper/entity/Pathfinder.java b/src/main/java/com/destroystokyo/paper/entity/Pathfinder.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..43f062257472a06e9e64c2feef6c3b1012aee00e
+index 0000000000000000000000000000000000000000..54bd510e7d42ac4e46464fdc4dbd213c105b1d5b
 --- /dev/null
 +++ b/src/main/java/com/destroystokyo/paper/entity/Pathfinder.java
-@@ -0,0 +1,212 @@
+@@ -0,0 +1,285 @@
 +package com.destroystokyo.paper.entity;
 +
 +import org.bukkit.Location;
@@ -197,6 +243,79 @@ index 0000000000000000000000000000000000000000..43f062257472a06e9e64c2feef6c3b10
 +     * @param canFloat if the mob can float, or not
 +     */
 +    void setCanFloat(boolean canFloat);
++
++    /**
++     * Defines the path interest level for this mob to advance on this
++     * path block rather than others.
++     *
++     * @param pathBlock The path block
++     * @param level The interest level applied for this block path
++     */
++    void setPathInterestLevel(PathBlock pathBlock, float level);
++
++    /**
++     * Gets the path interest level of this mob. The penalty
++     * can be not used by the server when the vehicle
++     * inherit its own path interest level to the passengers.
++     *
++     * @param pathBlock The path block
++     * @return The interest level for this path block if it's positive it's a bonus otherwise a malus
++     * @see #getPathEffectiveInterestLevel(PathBlock)
++     */
++    float getPathInterestLevel(PathBlock pathBlock);
++
++    /**
++     * Gets the final path interest level applied and used by the
++     * pathfinding for this mob.
++     *
++     * @param pathBlock The path block
++     * @return The interest level for this path block if it's positive it's a bonus otherwise a malus
++     */
++    float getPathEffectiveInterestLevel(PathBlock pathBlock);
++
++    /**
++     * Checks if this mob inherits its own path interest in its passengers
++     * If false the method {@link #getPathInterestLevel(PathBlock)} will return
++     * the same level of the method {@link #getPathEffectiveInterestLevel(PathBlock)}
++     * @return If this mob inherits its own path interest in its passengers
++     */
++    boolean inheritPathInterestForPassengers();
++
++    /**
++     * Checks if this mob can go through a corner block
++     *
++     * @param pathBlock The path block
++     * @return if the mob can advance through the corner block
++     */
++    boolean canCutThroughCornerBlock(PathBlock pathBlock);
++
++    /**
++     * Gets all the blocks that this mob will try to avoid
++     * to cut through.
++     * Note: the returned list remains a view (copy of the original)
++     * and the changes made here will not be taken
++     *
++     * @return The list of the path blocks
++     */
++    List<PathBlock> getFearCutCornerBlocks();
++
++    /**
++     * Adds a new corner block that this mob will avoid
++     * when advancing
++     *
++     * @param pathBlock The path block
++     * @return if the block path has been registered
++     */
++    boolean addFearCutCornerBlock(PathBlock pathBlock);
++
++    /**
++     * Remove a corner block that this mob will ignore
++     * when advancing
++     *
++     * @param pathBlock The path block
++     * @return if the block path has been removed
++     */
++    boolean removeCutFearCornerBlock(PathBlock pathBlock);
 +
 +    /**
 +     * Represents the result of a pathfinding calculation

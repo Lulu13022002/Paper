@@ -105,7 +105,7 @@ index f77c2eeb6c367df4d72e5908071eb079ee6f0def..17b6c6ee8c2754e1f98badebf506390c
  
      protected ChunkGenerator generator() {
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index b0c971df2ae296b2ae4516ff121052b3b4526103..2c61c756764bc8d2830294ca0c8be8e0e8fb1828 100644
+index a856089e292580d20876603efda688d7ab18b3d5..ecd025798205691892819863a50d7767f663d3d1 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -405,6 +405,83 @@ public class ServerLevel extends Level implements WorldGenLevel {
@@ -208,10 +208,10 @@ index b0c971df2ae296b2ae4516ff121052b3b4526103..2c61c756764bc8d2830294ca0c8be8e0
  
          this.handlingTick = true;
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index a49dfe4f81d449c5dd7ba5b8f9af7fec5c54f5de..3646b969fa51b9683ab4137e530c3a6f6fc6c465 100644
+index 2e347d8da59dab471a0956e251b1efbdfb8940a6..d625a9411bfa49a024ad0d0903ad497bd890d734 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
-@@ -802,7 +802,12 @@ public abstract class Mob extends LivingEntity {
+@@ -817,7 +817,12 @@ public abstract class Mob extends LivingEntity {
          if (this.level.getDifficulty() == Difficulty.PEACEFUL && this.shouldDespawnInPeaceful()) {
              this.discard();
          } else if (!this.isPersistenceRequired() && !this.requiresCustomPersistence()) {
