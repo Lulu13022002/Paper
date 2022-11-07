@@ -11,17 +11,26 @@ Co-authored-by: Jake Potrebic <jake.m.potrebic@gmail.com>
 Co-authored-by: Noah van der Aa <ndvdaa@gmail.com>
 
 diff --git a/src/main/java/net/minecraft/world/level/block/CactusBlock.java b/src/main/java/net/minecraft/world/level/block/CactusBlock.java
-index 1ec242205b82a5a1f10deb2312795cc5dc157a76..1110a1103e208d3d0608b6d14a6b6b1a7ee3eda5 100644
+index 1ec242205b82a5a1f10deb2312795cc5dc157a76..104b88ffae317fec23d33f73c39f37065254b625 100644
 --- a/src/main/java/net/minecraft/world/level/block/CactusBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/CactusBlock.java
-@@ -59,7 +59,7 @@ public class CactusBlock extends Block {
+@@ -58,14 +58,14 @@ public class CactusBlock extends Block {
+             if (i < world.paperConfig().maxGrowthHeight.cactus) { // Paper - Configurable growth height
                  int j = (Integer) state.getValue(CactusBlock.AGE);
  
-                 int modifier = world.spigotConfig.cactusModifier; // Spigot - SPIGOT-7159: Better modifier resolution
+-                int modifier = world.spigotConfig.cactusModifier; // Spigot - SPIGOT-7159: Better modifier resolution
 -                if (j >= 15 || (modifier != 100 && random.nextFloat() < (modifier / (100.0f * 16)))) { // Spigot - SPIGOT-7159: Better modifier resolution
++                double modifier = world.spigotConfig.cactusModifier; // Spigot - SPIGOT-7159: Better modifier resolution // Paper
 +                if (j == 15) { // Spigot - SPIGOT-7159: Better modifier resolution // Paper
                      CraftEventFactory.handleBlockGrowEvent(world, blockposition1, this.defaultBlockState()); // CraftBukkit
                      BlockState iblockdata1 = (BlockState) state.setValue(CactusBlock.AGE, 0);
+ 
+                     world.setBlock(pos, iblockdata1, 4);
+                     world.neighborChanged(iblockdata1, blockposition1, this, pos, false);
+-                } else if (modifier == 100 || random.nextFloat() < (modifier / (100.0f * 16))) { // Spigot - SPIGOT-7159: Better modifier resolution
++                } else if (modifier == 100 || random.nextDouble() < (modifier / 100.0f)) { // Spigot - SPIGOT-7159: Better modifier resolution // Paper
+                     world.setBlock(pos, (BlockState) state.setValue(CactusBlock.AGE, j + 1), 4);
+                 }
  
 diff --git a/src/main/java/net/minecraft/world/level/block/CaveVinesBlock.java b/src/main/java/net/minecraft/world/level/block/CaveVinesBlock.java
 index 7d9056f9d841fbbdeaf1e323d818f2f1267b47e8..4940e101250874111e9c55aeb5b87b28602246f0 100644
@@ -71,22 +80,39 @@ index 4e30917fbc5c539fefc8dc391b902241f7c5ad35..b7517d1e8a5d5eb719de5eda424b7dd2
          return (BlockState) state.cycle(GrowingPlantHeadBlock.AGE);
      }
 diff --git a/src/main/java/net/minecraft/world/level/block/SugarCaneBlock.java b/src/main/java/net/minecraft/world/level/block/SugarCaneBlock.java
-index 6b400a4759c8c8612a3b5c96ca0d87ef9dc71435..14eb3cb22a05e72cd9f334738e8c4574a2b01f5e 100644
+index 6b400a4759c8c8612a3b5c96ca0d87ef9dc71435..8edc0c5859ecb3eb3c4fbc0a5c9a2c3b0e0458c2 100644
 --- a/src/main/java/net/minecraft/world/level/block/SugarCaneBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/SugarCaneBlock.java
-@@ -56,7 +56,7 @@ public class SugarCaneBlock extends Block {
+@@ -55,11 +55,11 @@ public class SugarCaneBlock extends Block {
+             if (i < world.paperConfig().maxGrowthHeight.reeds) { // Paper - Configurable growth height
                  int j = (Integer) state.getValue(SugarCaneBlock.AGE);
  
-                 int modifier = world.spigotConfig.caneModifier; // Spigot - SPIGOT-7159: Better modifier resolution
+-                int modifier = world.spigotConfig.caneModifier; // Spigot - SPIGOT-7159: Better modifier resolution
 -                if (j >= 15 || (modifier != 100 && random.nextFloat() < (modifier / (100.0f * 16)))) { // Spigot - SPIGOT-7159: Better modifier resolution
++                double modifier = world.spigotConfig.caneModifier; // Spigot - SPIGOT-7159: Better modifier resolution // Paper
 +                if (j == 15) { // Spigot - SPIGOT-7159: Better modifier resolution // Paper
                      org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockGrowEvent(world, pos.above(), this.defaultBlockState()); // CraftBukkit
                      world.setBlock(pos, (BlockState) state.setValue(SugarCaneBlock.AGE, 0), 4);
-                 } else if (modifier == 100 || random.nextFloat() < (modifier / (100.0f * 16))) { // Spigot - SPIGOT-7159: Better modifier resolution
+-                } else if (modifier == 100 || random.nextFloat() < (modifier / (100.0f * 16))) { // Spigot - SPIGOT-7159: Better modifier resolution
++                } else if (modifier == 100 || random.nextDouble() < (modifier / 100.0D)) { // Spigot - SPIGOT-7159: Better modifier resolution // Paper
+                     world.setBlock(pos, (BlockState) state.setValue(SugarCaneBlock.AGE, j + 1), 4);
+                 }
+             }
 diff --git a/src/main/java/org/spigotmc/SpigotWorldConfig.java b/src/main/java/org/spigotmc/SpigotWorldConfig.java
-index 102b038e2566cba4f259a61e502ff0808c47234c..6bcc46795d1f78746192cc107c4a1f61580ec3c5 100644
+index 102b038e2566cba4f259a61e502ff0808c47234c..e5ce9f0298efce45d61295333d880d1c79575034 100644
 --- a/src/main/java/org/spigotmc/SpigotWorldConfig.java
 +++ b/src/main/java/org/spigotmc/SpigotWorldConfig.java
+@@ -87,8 +87,8 @@ public class SpigotWorldConfig
+     }
+ 
+     // Crop growth rates
+-    public int cactusModifier;
+-    public int caneModifier;
++    public double cactusModifier; // Paper migrate int -> double
++    public double caneModifier; // Paper migrate int -> double
+     public int melonModifier;
+     public int mushroomModifier;
+     public int pumpkinModifier;
 @@ -106,6 +106,7 @@ public class SpigotWorldConfig
      public int twistingVinesModifier;
      public int weepingVinesModifier;
@@ -95,7 +121,39 @@ index 102b038e2566cba4f259a61e502ff0808c47234c..6bcc46795d1f78746192cc107c4a1f61
      private int getAndValidateGrowth(String crop)
      {
          int modifier = this.getInt( "growth." + crop.toLowerCase(java.util.Locale.ENGLISH) + "-modifier", 100 );
-@@ -139,6 +140,7 @@ public class SpigotWorldConfig
+@@ -118,10 +119,29 @@ public class SpigotWorldConfig
+ 
+         return modifier;
+     }
++    // Paper start
++    private double getAndValidateGrowthDouble(String crop, int divider)
++    {
++        double modifier = this.getDouble( "growth." + crop.toLowerCase(java.util.Locale.ENGLISH) + "-modifier", 100.0D );
++        if ( modifier <= 0 )
++        {
++            this.log( "Cannot set " + crop + " growth to zero or negative, defaulting to 100" );
++            modifier = 100;
++        }
++        if (modifier > 100.0D) {
++            modifier /= divider;
++            this.set("growth." + crop.toLowerCase(java.util.Locale.ENGLISH) + "-modifier", modifier);
++            this.log("Convert the grow modifier " + crop + " from spigot int to float percent");
++        }
++        this.log( crop + " Growth Modifier: " + modifier + "%" );
++
++        return modifier;
++    }
++    // Paper end
+     private void growthModifiers()
+     {
+-        this.cactusModifier = this.getAndValidateGrowth( "Cactus" );
+-        this.caneModifier = this.getAndValidateGrowth( "Cane" );
++        this.cactusModifier = this.getAndValidateGrowthDouble( "Cactus", 16 ); // Paper
++        this.caneModifier = this.getAndValidateGrowthDouble( "Cane", 16 ); // Paper
+         this.melonModifier = this.getAndValidateGrowth( "Melon" );
+         this.mushroomModifier = this.getAndValidateGrowth( "Mushroom" );
+         this.pumpkinModifier = this.getAndValidateGrowth( "Pumpkin" );
+@@ -139,6 +159,7 @@ public class SpigotWorldConfig
          this.twistingVinesModifier = this.getAndValidateGrowth( "TwistingVines" );
          this.weepingVinesModifier = this.getAndValidateGrowth( "WeepingVines" );
          this.caveVinesModifier = this.getAndValidateGrowth( "CaveVines" );
