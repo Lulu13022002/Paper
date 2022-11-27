@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Lulu13022002 <41980282+Lulu13022002@users.noreply.github.com>
+Date: Sun, 27 Nov 2022 21:50:41 +0100
+Subject: [PATCH] Apply offset when riding entity
+
+
+diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+index d31a345edfffe39f127073fc3aec8b3489bae79c..943f515b43d476c1f0ca810e2f0b4ef6ad95b41a 100644
+--- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
++++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+@@ -689,7 +689,6 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
+                 Location curPos = this.getCraftPlayer().getLocation(); // Spigot
+ 
+                 entity.absMoveTo(d3, d4, d5, f, f1);
+-                this.player.absMoveTo(d3, d4, d5, this.player.getYRot(), this.player.getXRot()); // CraftBukkit
+ 
+                 // Paper start - optimise out extra getCubes
+                 boolean teleportBack = flag2; // violating this is always a fail
+@@ -702,7 +701,6 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
+                 }
+                 if (teleportBack) { // Paper end - optimise out extra getCubes
+                     entity.absMoveTo(d0, d1, d2, f, f1);
+-                    this.player.absMoveTo(d0, d1, d2, this.player.getYRot(), this.player.getXRot()); // CraftBukkit
+                     this.connection.send(new ClientboundMoveVehiclePacket(entity));
+                     return;
+                 }
+@@ -725,7 +723,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
+ 
+                 // If the packet contains movement information then we update the To location with the correct XYZ.
+                 to.setX(packet.getX());
+-                to.setY(packet.getY());
++                //to.setY(packet.getY());
+                 to.setZ(packet.getZ());
+ 
+ 
