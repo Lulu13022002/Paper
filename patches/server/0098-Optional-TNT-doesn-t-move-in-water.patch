@@ -18,7 +18,7 @@ index 6b372ac843e992820ac0a8ebb9c3c5d9795cc6b0..841bb7741ae6b0e9cb98120ee1649b93
      public ServerEntity(ServerLevel worldserver, Entity entity, int i, boolean flag, Consumer<Packet<?>> consumer, Set<ServerPlayerConnection> trackedPlayers) {
          this.trackedPlayers = trackedPlayers;
 diff --git a/src/main/java/net/minecraft/world/entity/item/PrimedTnt.java b/src/main/java/net/minecraft/world/entity/item/PrimedTnt.java
-index aa0dfd08aefbb9363ec96080432f0f75d71b0b95..4b81d62d3250b99cbcb4eb2468ef81c149bf177e 100644
+index aa0dfd08aefbb9363ec96080432f0f75d71b0b95..f96f668e51d1f9e8134c4c537dca64eefa85661d 100644
 --- a/src/main/java/net/minecraft/world/entity/item/PrimedTnt.java
 +++ b/src/main/java/net/minecraft/world/entity/item/PrimedTnt.java
 @@ -94,6 +94,27 @@ public class PrimedTnt extends Entity {
@@ -38,7 +38,7 @@ index aa0dfd08aefbb9363ec96080432f0f75d71b0b95..4b81d62d3250b99cbcb4eb2468ef81c1
 +                net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket positionPacket = new net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket(this);
 +
 +                ete.seenBy.stream()
-+                    .filter(viewer -> (viewer.getPlayer().getX() - this.getX()) * (viewer.getPlayer().getY() - this.getY()) * (viewer.getPlayer().getZ() - this.getZ()) < 16 * 16)
++                    .filter(viewer -> Math.pow(viewer.getPlayer().getX() - this.getX(), 2) + Math.pow(viewer.getPlayer().getY() - this.getY(), 2) + Math.pow(viewer.getPlayer().getZ() - this.getZ(), 2) < 16 * 16)
 +                    .forEach(viewer -> {
 +                        viewer.send(velocityPacket);
 +                        viewer.send(positionPacket);
